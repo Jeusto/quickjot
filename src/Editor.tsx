@@ -5,7 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import { notifications } from "@mantine/notifications";
 import { useClipboard } from "@mantine/hooks";
 import { IconMoonStars, IconSun } from "@tabler/icons-react";
-import { initialContent, zipurl, unzipurl, formatTimestamp } from "./utils";
+import { placeholderContent, zipurl, unzipurl, formatTimestamp } from "./utils";
+import Placeholder from "@tiptap/extension-placeholder";
 import {
   ActionIcon,
   Button,
@@ -34,11 +35,15 @@ export function Editor() {
 
   // Configure editor
   const editor = useEditor({
-    extensions: [StarterKit, Link],
-    content: initialContent,
+    extensions: [
+      StarterKit,
+      Placeholder.configure({ placeholder: placeholderContent }),
+      Link,
+    ],
+    content: "",
   });
 
-  // Retreve editor content from URL
+  // Retrieve editor content from URL
   useEffect(() => {
     if (window.location.hash) {
       editor?.commands.setContent(unzipurl(window.location.hash.substring(1)));
